@@ -1,0 +1,3 @@
+﻿src/auth/auth.module.ts(3,27): error TS2307: Cannot find module '@nestjs/jwt' or its corresponding type declarations.
+src/auth/auth.service.ts(6,28): error TS2307: Cannot find module '@nestjs/jwt' or its corresponding type declarations.
+src/auth/auth.service.ts(32,17): error TS2339: Property 'passwordHash' does not exist on type 'Usuario[]'.

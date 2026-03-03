@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-surface-50 text-slate-800 antialiased font-sans selection:bg-brand-500 selection:text-white;
+  }
+}
+
+@layer components {
+
+  /* Botón Principal - Alta Jerarquía */
+  .btn-primary {
+    @apply relative overflow-hidden px-5 py-2.5 bg-brand-500 text-white font-semibold rounded-xl shadow-sm hover:shadow-md hover:bg-brand-600 hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
+  }
+
+  /* Botón Secundario - Acciones menos destructivas/importantes */
+  .btn-secondary {
+    @apply px-5 py-2.5 bg-white text-slate-700 border border-slate-200 font-semibold rounded-xl shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 focus:outline-none focus-visible:ring-4 focus-visible:ring-slate-200 active:bg-slate-100;
+  }
+
+  /* Inputs de Formulario Modernos */
+  .input-field {
+    @apply w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-500 hover:border-slate-300 outline-none transition-all duration-200 shadow-sm;
+  }
+
+  /* Etiquetas de Inputs */
+  .label-primary {
+    @apply block text-sm font-semibold text-slate-600 mb-1.5 ml-1;
+  }
+
+  /* Tarjetas Premium */
+  .card-premium {
+    @apply bg-white rounded-2xl shadow-soft border border-surface-border overflow-hidden hover:shadow-floating transition-shadow duration-300;
+  }
+}

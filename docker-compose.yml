@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: donpollo_db
+    restart: always
+    environment:
+      POSTGRES_USER: donpollo_user
+      POSTGRES_PASSWORD: donpollo_password
+      POSTGRES_DB: donpollo_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - donpollo_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: donpollo_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@donpollo.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+volumes:
+  donpollo_data:
