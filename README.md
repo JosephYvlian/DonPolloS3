@@ -39,3 +39,8 @@ npm run dev
 *   La aplicación web (UI) estará disponible en tu navegador en http://localhost:5173 (o `5174` dependiendo del puerto libre).
 
 ---
+
+## Hecho por:
+- Joseph Yulian Garcia Cubillos
+- Mariana Ramos Quiroz
+- Juan Andres Pérez Gallego
