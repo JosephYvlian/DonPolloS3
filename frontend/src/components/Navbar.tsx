@@ -49,6 +49,14 @@ export default function Navbar() {
                                 <Package className="w-5 h-5 mr-1.5 text-slate-400" />
                                 <span>Mis Pedidos</span>
                             </Link>
+                            {/* temporary admin link visible to any logged in user for testing */}
+                            <Link
+                                to="/admin/productos"
+                                className="hidden sm:flex items-center px-3 py-2 rounded-lg text-sm font-bold text-brand-600 hover:bg-brand-50 hover:text-brand-700 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                            >
+                                <Store className="w-5 h-5 mr-1.5 text-brand-400" />
+                                <span>Admin Panel</span>
+                            </Link>
                             <div className="hidden md:flex items-center px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100">
                                 <span className="text-sm font-semibold text-slate-700 truncate max-w-[150px]">{user.nombreCompleto}</span>
                             </div>

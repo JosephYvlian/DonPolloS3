@@ -5,6 +5,7 @@ import type { Producto } from '../types';
 import { ShoppingCart, Check, PackageOpen } from 'lucide-react';
 import clsx from 'clsx';
 import toast from 'react-hot-toast';
+import { formatCurrency } from '../utils/formatCurrency';
 
 export default function Home() {
     const [productos, setProductos] = useState<Producto[]>([]);
@@ -104,7 +105,7 @@ export default function Home() {
                                 <div className="mt-auto">
                                     <div className="flex items-center justify-between mb-4">
                                         <span className="text-2xl font-extrabold tracking-tight text-slate-900">
-                                            ${Number(producto.precio).toFixed(2)}
+                                            {formatCurrency(producto.precio)}
                                         </span>
                                     </div>
                                     <button

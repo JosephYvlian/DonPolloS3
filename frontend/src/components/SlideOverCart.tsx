@@ -5,6 +5,7 @@ import { useStore } from '../store/useStore';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api/axios';
 import toast from 'react-hot-toast';
+import { formatCurrency } from '../utils/formatCurrency';
 
 export default function SlideOverCart() {
     const { cart, removeFromCart, addToCart, isCartOpen, setIsCartOpen, cartTotal, clearCart, user } = useStore();
@@ -112,7 +113,7 @@ export default function SlideOverCart() {
                                                                         <div>
                                                                             <div className="flex justify-between text-base font-medium text-slate-800">
                                                                                 <h3 className="line-clamp-2 pr-4">{item.producto.nombre}</h3>
-                                                                                <p className="ml-4 font-bold whitespace-nowrap">${(item.producto.precio * item.cantidad).toFixed(2)}</p>
+                                                                                <p className="ml-4 font-bold whitespace-nowrap">{formatCurrency(item.producto.precio * item.cantidad)}</p>
                                                                             </div>
                                                                         </div>
                                                                         <div className="flex flex-1 items-end justify-between text-sm">
@@ -167,7 +168,7 @@ export default function SlideOverCart() {
                                             <div className="border-t border-slate-100 bg-slate-50 px-6 py-6 sm:px-8">
                                                 <div className="flex justify-between text-lg font-bold text-slate-900 mb-6">
                                                     <p>Total a Pagar</p>
-                                                    <p>${cartTotal().toFixed(2)}</p>
+                                                    <p>{formatCurrency(cartTotal())}</p>
                                                 </div>
                                                 <div className="mt-6">
                                                     <button

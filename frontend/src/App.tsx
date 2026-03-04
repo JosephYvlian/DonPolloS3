@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Orders from './pages/Orders';
 import { Toaster } from 'react-hot-toast';
 import SlideOverCart from './components/SlideOverCart';
+import AdminProducts from './pages/AdminProducts';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="/admin/productos" element={<AdminProducts />} />
             <Route path="/cart" element={<Navigate to="/" replace />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

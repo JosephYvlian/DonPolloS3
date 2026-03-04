@@ -5,6 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import type { Pedido } from '../types';
 import { Package, Calendar, Clock, ChevronRight, ShoppingBag } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { formatCurrency } from '../utils/formatCurrency';
 
 export default function Orders() {
     const [pedidos, setPedidos] = useState<Pedido[]>([]);
@@ -91,7 +92,7 @@ export default function Orders() {
                                     <div className="w-px h-8 bg-slate-100"></div>
                                     <div className="flex flex-col items-end">
                                         <span className="text-xs text-slate-400 font-semibold mb-0.5">Total pagado</span>
-                                        <span className="text-lg font-black text-slate-900 leading-none">${Number(pedido.total).toFixed(2)}</span>
+                                        <span className="text-lg font-black text-slate-900 leading-none">{formatCurrency(pedido.total)}</span>
                                     </div>
                                 </div>
                             </div>
@@ -111,14 +112,14 @@ export default function Orders() {
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="font-semibold text-slate-800 text-sm sm:text-base">{detalle.producto?.nombre || 'Producto Desconocido'}</span>
-                                                    <span className="text-xs text-slate-500 font-medium"> Precio Unitario: ${Number(detalle.precioUnitario).toFixed(2)}</span>
+                                                    <span className="text-xs text-slate-500 font-medium"> Precio Unitario: {formatCurrency(detalle.precioUnitario)}</span>
                                                 </div>
                                             </div>
 
                                             <div className="flex items-center space-x-6 text-right">
                                                 <span className="text-sm font-semibold text-slate-500 bg-slate-100 px-2 py-1 rounded-md">x{detalle.cantidad}</span>
                                                 <span className="text-base sm:text-lg font-bold text-slate-700 w-20">
-                                                    ${(detalle.precioUnitario * detalle.cantidad).toFixed(2)}
+                                                    {formatCurrency(detalle.precioUnitario * detalle.cantidad)}
                                                 </span>
                                             </div>
                                         </li>

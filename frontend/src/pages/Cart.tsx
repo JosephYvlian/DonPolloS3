@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { api } from '../api/axios';
 import { Trash2 } from 'lucide-react';
+import { formatCurrency } from '../utils/formatCurrency';
 
 export default function Cart() {
     const { cart, removeFromCart, cartTotal, clearCart, user } = useStore();
@@ -70,7 +71,7 @@ export default function Cart() {
                             </div>
                             <div className="flex items-center space-x-6">
                                 <span className="font-semibold text-gray-800">
-                                    ${(item.producto.precio * item.cantidad).toFixed(2)}
+                                    {formatCurrency(item.producto.precio * item.cantidad)}
                                 </span>
                                 <button
                                     onClick={() => removeFromCart(item.producto.id)}
@@ -86,7 +87,7 @@ export default function Cart() {
                 <div className="bg-gray-50 p-6 border-t border-gray-100">
                     <div className="flex justify-between items-center mb-6">
                         <span className="text-lg font-medium text-gray-600">Total</span>
-                        <span className="text-3xl font-bold text-gray-900">${cartTotal().toFixed(2)}</span>
+                        <span className="text-3xl font-bold text-gray-900">{formatCurrency(cartTotal())}</span>
                     </div>
                     <button
                         onClick={handleCheckout}
