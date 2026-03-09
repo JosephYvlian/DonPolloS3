@@ -76,4 +76,12 @@ export class ProductsService {
         }
         return updatedProducto;
     }
+
+    async delete(id: number): Promise<void> {
+        const producto = await this.productoRepository.findOne({ where: { id } });
+        if (!producto) {
+            throw new NotFoundException(`Producto with ID ${id} not found`);
+        }
+        await this.productoRepository.update(id, { estado: EstadoProducto.INACTIVO });
+    }
 }

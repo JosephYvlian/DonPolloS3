@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Param, Body, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ProductsService } from './products.service';
 
@@ -39,5 +39,10 @@ export class ProductsController {
             stockDisponible: productoData.stockDisponible ? parseInt(productoData.stockDisponible, 10) : undefined,
         };
         return this.productsService.update(+id, parsedData, file);
+    }
+
+    @Delete(':id')
+    async remove(@Param('id') id: string) {
+        return this.productsService.delete(+id);
     }
 }

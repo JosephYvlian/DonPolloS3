@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '../api/axios';
 import type { Producto } from '../types';
 import toast from 'react-hot-toast';
-import { Plus, Edit2, PackageOpen, Check, X } from 'lucide-react';
+import { Plus, Edit2, PackageOpen, Check, X, Trash2 } from 'lucide-react';
 import clsx from 'clsx';
 import { formatCurrency } from '../utils/formatCurrency';
 
@@ -45,6 +45,19 @@ export default function AdminProducts() {
         setImagen(null);
         setEditingId(null);
         setIsFormOpen(false);
+    };
+
+    const handleDelete = async (id: number, name: string) => {
+        if (window.confirm(`¿Estás seguro de que deseas eliminar el producto "${name}"?\nEsta acción lo ocultará del catálogo.`)) {
+            try {
+                await api.delete(`/productos/${id}`);
+                toast.success('Producto eliminado exitosamente');
+                fetchProductos();
+            } catch (err) {
+                console.error('Error deleting product', err);
+                toast.error('Ocurrió un error al eliminar el producto');
+            }
+        }
     };
 
     const handleEdit = (producto: Producto) => {
@@ -289,12 +302,20 @@ export default function AdminProducts() {
                                         {producto.stockDisponible}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                                     <button
                                         onClick={() => handleEdit(producto)}
                                         className="text-brand-600 hover:text-brand-900 bg-brand-50 hover:bg-brand-100 p-2 rounded-lg transition-colors inline-flex items-center"
+                                        title="Editar"
                                     >
-                                        <Edit2 className="w-4 h-4 mr-1" /> Editar
+                                        <Edit2 className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(producto.id, producto.nombre)}
+                                        className="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 p-2 rounded-lg transition-colors inline-flex items-center"
+                                        title="Eliminar"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
                                     </button>
                                 </td>
                             </tr>
