@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
-const producto_entity_1 = require("./src/productos/producto.entity");
-const usuario_entity_1 = require("./src/usuarios/usuario.entity");
-const pedido_entity_1 = require("./src/pedidos/pedido.entity");
-const detalle_pedido_entity_1 = require("./src/pedidos/detalle-pedido.entity");
+const producto_entity_1 = require("./productos/producto.entity");
+const usuario_entity_1 = require("./usuarios/usuario.entity");
+const pedido_entity_1 = require("./pedidos/pedido.entity");
+const detalle_pedido_entity_1 = require("./pedidos/detalle-pedido.entity");
 async function seed() {
     const connection = await (0, typeorm_1.createConnection)({
         type: 'postgres',
