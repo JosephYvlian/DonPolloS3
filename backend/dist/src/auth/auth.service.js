@@ -98,7 +98,7 @@ let AuthService = class AuthService {
     async requestPasswordReset(correo) {
         const user = await this.usuarioRepository.findOne({ where: { correo } });
         if (!user) {
-            return { message: 'Si el correo existe, se ha enviado un enlace de recuperación.' };
+            throw new common_1.NotFoundException('El correo no se encuentra registrado.');
         }
         const token = crypto.randomInt(100000, 999999).toString();
         user.resetPasswordToken = token;
