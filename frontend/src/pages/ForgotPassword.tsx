@@ -17,7 +17,8 @@ export default function ForgotPassword() {
             setSent(true);
             toast.success('Si el correo existe, hemos enviado un código de recuperación.');
         } catch (err: any) {
-            toast.error('Error al solicitar la recuperación de contraseña.');
+            const errorMessage = err.response?.data?.message || 'Error al solicitar la recuperación de contraseña.';
+            toast.error(errorMessage);
         } finally {
             setLoading(false);
         }

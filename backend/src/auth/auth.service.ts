@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario, RolUsuario } from '../usuarios/usuario.entity';
@@ -57,8 +57,7 @@ export class AuthService {
     async requestPasswordReset(correo: string) {
         const user = await this.usuarioRepository.findOne({ where: { correo } });
         if (!user) {
-            // No revelamos si el correo existe o no por seguridad, simplemente retornamos éxito.
-            return { message: 'Si el correo existe, se ha enviado un enlace de recuperación.' };
+            throw new NotFoundException('El correo no se encuentra registrado.');
         }
 
         const token = crypto.randomInt(100000, 999999).toString();
