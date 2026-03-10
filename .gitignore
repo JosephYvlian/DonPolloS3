@@ -4,10 +4,10 @@ node_modules/
 /backend/node_modules/
 
 # Directorios de compilación
-dist/
+# dist/
 build/
-/frontend/dist/
-/backend/dist/
+# /frontend/dist/
+# /backend/dist/
 
 # Variables de entorno (¡nunca se suben!)
 .env
