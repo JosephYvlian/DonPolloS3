@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
-import { ShoppingCart, LogOut, Package, Store } from 'lucide-react';
+import { ShoppingCart, LogOut, Package, User } from 'lucide-react';
 import clsx from 'clsx';
 
 export default function Navbar() {
@@ -16,10 +16,9 @@ export default function Navbar() {
 
     return (
         <nav className="bg-white border-b border-surface-border shadow-sm sticky top-0 z-40 bg-opacity-90 backdrop-blur-md">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-                <Link to="/" className="flex items-center space-x-2 text-brand-600 hover:text-brand-500 transition group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded px-2 -ml-2">
-                    <Store className="w-8 h-8 group-hover:scale-110 transition-transform duration-300" />
-                    <span className="text-2xl font-bold tracking-tight">Don Pollo</span>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+                <Link to="/" className="flex items-center transition group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded px-2 -ml-2 py-1">
+                    <img src="https://res.cloudinary.com/dvpt0r0wz/image/upload/v1741581139/donpollo/logo.png" alt="Don Pollo" className="h-12 sm:h-14 w-auto scale-[1.3] md:scale-[1.5] origin-left group-hover:drop-shadow-md transition-all duration-300" />
                 </Link>
                 <div className="flex items-center space-x-2 sm:space-x-4">
                     <button
@@ -43,19 +42,18 @@ export default function Navbar() {
                     {user ? (
                         <div className="flex items-center space-x-1 sm:space-x-3">
                             <Link
+                                to="/profile"
+                                className="hidden sm:flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                            >
+                                <User className="w-5 h-5 mr-1.5 text-slate-400" />
+                                <span>Mi Perfil</span>
+                            </Link>
+                            <Link
                                 to="/orders"
                                 className="hidden sm:flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                             >
                                 <Package className="w-5 h-5 mr-1.5 text-slate-400" />
                                 <span>Mis Pedidos</span>
-                            </Link>
-                            {/* temporary admin link visible to any logged in user for testing */}
-                            <Link
-                                to="/admin/productos"
-                                className="hidden sm:flex items-center px-3 py-2 rounded-lg text-sm font-bold text-brand-600 hover:bg-brand-50 hover:text-brand-700 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
-                            >
-                                <Store className="w-5 h-5 mr-1.5 text-brand-400" />
-                                <span>Admin Panel</span>
                             </Link>
                             <div className="hidden md:flex items-center px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100">
                                 <span className="text-sm font-semibold text-slate-700 truncate max-w-[150px]">{user.nombreCompleto}</span>

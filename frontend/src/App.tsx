@@ -6,7 +6,10 @@ import Register from './pages/Register';
 import Orders from './pages/Orders';
 import { Toaster } from 'react-hot-toast';
 import SlideOverCart from './components/SlideOverCart';
-import AdminProducts from './pages/AdminProducts';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import Profile from './pages/Profile';
+import Cart from './pages/Cart';
 
 function App() {
   return (
@@ -32,9 +35,11 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/orders" element={<Orders />} />
-            <Route path="/admin/productos" element={<AdminProducts />} />
-            <Route path="/cart" element={<Navigate to="/" replace />} />
+            <Route path="/cart" element={<Cart />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>

@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { Usuario, RolUsuario } from '../usuarios/usuario.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { MailerService } from '../mailer/mailer.service';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -11,6 +13,7 @@ export class AuthService {
         @InjectRepository(Usuario)
         private readonly usuarioRepository: Repository<Usuario>,
         private readonly jwtService: JwtService,
+        private readonly mailerService: MailerService,
     ) { }
 
     async register(data: any): Promise<any> {
@@ -49,5 +52,45 @@ export class AuthService {
             access_token: this.jwtService.sign(payload),
             user,
         };
+    }
+
+    async requestPasswordReset(correo: string) {
+        const user = await this.usuarioRepository.findOne({ where: { correo } });
+        if (!user) {
+            // No revelamos si el correo existe o no por seguridad, simplemente retornamos éxito.
+            return { message: 'Si el correo existe, se ha enviado un enlace de recuperación.' };
+        }
+
+        const token = crypto.randomInt(100000, 999999).toString();
+        user.resetPasswordToken = token;
+        
+        const expires = new Date();
+        expires.setHours(expires.getHours() + 1);
+        user.resetPasswordExpires = expires;
+
+        await this.usuarioRepository.save(user);
+
+        await this.mailerService.sendPasswordResetEmail(user.correo, token);
+
+        return { message: 'Si el correo existe, se ha enviado un enlace de recuperación.' };
+    }
+
+    async resetPassword(token: string, newPassword: string) {
+        const user = await this.usuarioRepository.findOne({
+            where: { resetPasswordToken: token },
+        });
+
+        if (!user || !user.resetPasswordExpires || user.resetPasswordExpires < new Date()) {
+            throw new ConflictException('Token inválido o expirado.');
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        user.passwordHash = await bcrypt.hash(newPassword, salt);
+        user.resetPasswordToken = null;
+        user.resetPasswordExpires = null;
+
+        await this.usuarioRepository.save(user);
+
+        return { message: 'Contraseña actualizada exitosamente.' };
     }
 }

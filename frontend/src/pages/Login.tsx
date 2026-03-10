@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../api/axios';
 import { useStore } from '../store/useStore';
-import { Store, ArrowRight, Mail, Lock } from 'lucide-react';
+import { ArrowRight, Mail, Lock } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function Login() {
@@ -31,8 +31,8 @@ export default function Login() {
         <div className="animate-fade-in flex flex-col justify-center items-center min-h-[70vh] px-4">
             <div className="w-full max-w-md bg-white p-8 md:p-10 rounded-3xl shadow-soft border border-surface-border">
                 <div className="flex flex-col items-center mb-8">
-                    <div className="w-16 h-16 bg-brand-50 text-brand-500 rounded-2xl flex items-center justify-center mb-4">
-                        <Store className="w-8 h-8" />
+                    <div className="mb-6 flex justify-center">
+                        <img src="https://res.cloudinary.com/dvpt0r0wz/image/upload/v1741581139/donpollo/logo.png" alt="Don Pollo Logo" className="h-24 w-auto drop-shadow-md" />
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">Iniciar Sesión</h2>
                     <p className="text-slate-500 mt-2 text-center text-sm font-medium">Ingresa para realizar y ver tus pedidos.</p>
@@ -74,6 +74,11 @@ export default function Login() {
                                 required
                                 autoComplete="current-password"
                             />
+                        </div>
+                        <div className="flex justify-end mt-2">
+                            <Link to="/forgot-password" className="text-sm font-medium text-brand-600 hover:text-brand-700 hover:underline">
+                                ¿Olvidaste tu contraseña?
+                            </Link>
                         </div>
                     </div>
 

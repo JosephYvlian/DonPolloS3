@@ -7,7 +7,7 @@ export class AuthController {
 
     @Post('register')
     async register(@Body() body: any) {
-        if (!body.correo || !body.passwordHash || !body.nombreCompleto) {
+        if (!body.correo || !body.passwordHash || !body.nombreCompleto || !body.telefono) {
             throw new BadRequestException('Faltan campos obligatorios');
         }
         return this.authService.register(body);
@@ -24,5 +24,21 @@ export class AuthController {
             throw new UnauthorizedException('Credenciales inválidas');
         }
         return this.authService.login(user);
+    }
+
+    @Post('forgot-password')
+    async forgotPassword(@Body() body: any) {
+        if (!body.correo) {
+            throw new BadRequestException('El correo es requerido');
+        }
+        return this.authService.requestPasswordReset(body.correo);
+    }
+
+    @Post('reset-password')
+    async resetPassword(@Body() body: any) {
+        if (!body.token || !body.newPassword) {
+            throw new BadRequestException('El token y la nueva contraseña son requeridos');
+        }
+        return this.authService.resetPassword(body.token, body.newPassword);
     }
 }

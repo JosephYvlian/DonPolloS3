@@ -126,6 +126,18 @@ export default function Orders() {
                                     ))}
                                 </ul>
                             </div>
+                            
+                            {pedido.direccionEntrega && (
+                                <div className="bg-white px-5 sm:px-6 py-4 border-t border-surface-border flex items-start">
+                                    <div className="bg-slate-50 p-2 rounded-lg mr-3 text-slate-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Entregar a</p>
+                                        <p className="text-sm font-medium text-slate-700">{pedido.direccionEntrega}</p>
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="bg-slate-50 p-3 flex justify-center border-t border-surface-border">
                                 <button className="text-sm text-brand-600 font-bold flex items-center hover:text-brand-700 transition group p-2">

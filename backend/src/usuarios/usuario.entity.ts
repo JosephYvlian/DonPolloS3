@@ -16,14 +16,20 @@ export class Usuario {
   @Column({ unique: true })
   correo: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   telefono: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   direccion: string;
 
   @Column()
   passwordHash: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  resetPasswordToken: string | null;
+
+  @Column({ type: 'timestamp', nullable: true })
+  resetPasswordExpires: Date | null;
 
   @Column({
     type: 'enum',

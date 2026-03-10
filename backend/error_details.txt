@@ -1,0 +1,10 @@
+DataTypeNotSupportedError: Data type "Object" in "Usuario.resetPasswordToken" is not supported by "postgres" database.
+    at C:\Users\josep\Universidad\Software 3\DonPolloV1\backend\node_modules\src\metadata-builder\EntityMetadataValidator.ts:133:31
+    at Array.forEach (<anonymous>)
+    at EntityMetadataValidator.validate (C:\Users\josep\Universidad\Software 3\DonPolloV1\backend\node_modules\src\metadata-builder\EntityMetadataValidator.ts:128:18)
+    at C:\Users\josep\Universidad\Software 3\DonPolloV1\backend\node_modules\src\metadata-builder\EntityMetadataValidator.ts:43:18
+    at Array.forEach (<anonymous>)
+    at EntityMetadataValidator.validateMany (C:\Users\josep\Universidad\Software 3\DonPolloV1\backend\node_modules\src\metadata-builder\EntityMetadataValidator.ts:42:25)
+    at DataSource.buildMetadatas (C:\Users\josep\Universidad\Software 3\DonPolloV1\backend\node_modules\src\data-source\DataSource.ts:753:33)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DataSource.initialize (C:\Users\josep\Universidad\Software 3\DonPolloV1\backend\node_modules\src\data-source\DataSource.ts:264:13)

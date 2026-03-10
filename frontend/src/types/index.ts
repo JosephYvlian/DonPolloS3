@@ -2,6 +2,7 @@ export interface Usuario {
     id: number;
     nombreCompleto: string;
     correo: string;
+    telefono?: string;
     rol: 'CLIENTE' | 'ADMINISTRADOR';
 }
 
@@ -20,5 +21,6 @@ export interface Pedido {
     fechaPedido: string;
     total: number;
     estado: string;
+    direccionEntrega?: string;
     detalles: any[];
 }

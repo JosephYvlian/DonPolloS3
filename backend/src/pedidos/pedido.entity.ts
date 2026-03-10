@@ -24,6 +24,9 @@ export class Pedido {
     @CreateDateColumn()
     fechaPedido: Date;
 
+    @Column({ nullable: true })
+    direccionEntrega: string;
+
     @Column('decimal', { precision: 10, scale: 2 })
     total: number;
 

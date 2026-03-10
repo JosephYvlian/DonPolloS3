@@ -3,38 +3,16 @@ import { Dialog, Transition } from '@headlessui/react';
 import { ShoppingCart, X, Trash2, Plus, Minus, ArrowRight } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../api/axios';
 import toast from 'react-hot-toast';
 import { formatCurrency } from '../utils/formatCurrency';
 
 export default function SlideOverCart() {
-    const { cart, removeFromCart, addToCart, isCartOpen, setIsCartOpen, cartTotal, clearCart, user } = useStore();
+    const { cart, removeFromCart, addToCart, isCartOpen, setIsCartOpen, cartTotal } = useStore();
     const navigate = useNavigate();
 
-    const handleCheckout = async () => {
-        if (!user) {
-            setIsCartOpen(false);
-            navigate('/login');
-            toast.error('Inicia sesión para continuar');
-            return;
-        }
-
-        if (cart.length === 0) return;
-
-        try {
-            const items = cart.map((item) => ({
-                productoId: item.producto.id,
-                cantidad: item.cantidad,
-            }));
-
-            await api.post('/pedidos', { items });
-            clearCart();
-            setIsCartOpen(false);
-            navigate('/orders');
-            toast.success('¡Pedido confirmado exitosamente!');
-        } catch (err: any) {
-            toast.error(err.response?.data?.message || 'Error al procesar el pedido. Verifica el stock.');
-        }
+    const handleGoToCheckout = () => {
+        setIsCartOpen(false);
+        navigate('/cart');
     };
 
     return (
@@ -172,10 +150,10 @@ export default function SlideOverCart() {
                                                 </div>
                                                 <div className="mt-6">
                                                     <button
-                                                        onClick={handleCheckout}
+                                                        onClick={handleGoToCheckout}
                                                         className="btn-primary w-full flex items-center justify-center py-3.5 text-lg"
                                                     >
-                                                        <span>Confirmar Pedido</span>
+                                                        <span>Ir al Checkout</span>
                                                         <ArrowRight className="ml-2 w-5 h-5" />
                                                     </button>
                                                 </div>

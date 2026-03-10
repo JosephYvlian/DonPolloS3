@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { Usuario, Producto } from '../types';
 
 interface CartItem {
@@ -20,20 +21,16 @@ interface AppState {
     cartTotal: () => number;
 }
 
-export const useStore = create<AppState>((set, get) => ({
-    user: null,
-    token: localStorage.getItem('token') || null,
-    cart: [],
-    isCartOpen: false,
-    setIsCartOpen: (isOpen) => set({ isCartOpen: isOpen }),
-    setUser: (user, token) => {
-        localStorage.setItem('token', token);
-        set({ user, token });
-    },
-    logout: () => {
-        localStorage.removeItem('token');
-        set({ user: null, token: null, cart: [] });
-    },
+export const useStore = create<AppState>()(
+    persist(
+        (set, get) => ({
+            user: null,
+            token: null,
+            cart: [],
+            isCartOpen: false,
+            setIsCartOpen: (isOpen) => set({ isCartOpen: isOpen }),
+            setUser: (user, token) => set({ user, token }),
+            logout: () => set({ user: null, token: null, cart: [] }),
     addToCart: (producto) => {
         const { cart } = get();
         const existing = cart.find(item => item.producto.id === producto.id);
@@ -50,4 +47,10 @@ export const useStore = create<AppState>((set, get) => ({
     },
     clearCart: () => set({ cart: [] }),
     cartTotal: () => get().cart.reduce((total, item) => total + (item.producto.precio * item.cantidad), 0),
-}));
+        }),
+        {
+            name: 'donpollo-storage',
+            partialize: (state) => ({ user: state.user, token: state.token, cart: state.cart }),
+        }
+    )
+);

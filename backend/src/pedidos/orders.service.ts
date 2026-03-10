@@ -13,7 +13,11 @@ export class OrdersService {
         private dataSource: DataSource,
     ) { }
 
-    async createPedidoTransaction(usuarioId: number, items: { productoId: number; cantidad: number }[]) {
+    async createPedidoTransaction(usuarioId: number, items: { productoId: number; cantidad: number }[], direccionEntrega: string) {
+        if (!direccionEntrega) {
+            throw new BadRequestException('La dirección de entrega es obligatoria');
+        }
+
         if (!items || items.length === 0) {
             throw new BadRequestException('El pedido debe tener al menos un producto');
         }
@@ -57,6 +61,7 @@ export class OrdersService {
             nuevoPedido.usuarioId = usuarioId;
             nuevoPedido.estado = EstadoPedido.RECIBIDO;
             nuevoPedido.total = totalPedido;
+            nuevoPedido.direccionEntrega = direccionEntrega;
 
             const savedPedido = await queryRunner.manager.save(nuevoPedido);
 

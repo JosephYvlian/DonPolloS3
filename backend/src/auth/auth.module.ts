@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { Usuario } from '../usuarios/usuario.entity';
 import { JwtStrategy } from './jwt.strategy';
+import { MailerModule } from '../mailer/mailer.module';
 
 export const jwtSecret = process.env.JWT_SECRET || 'secretKey123';
 
@@ -17,6 +18,7 @@ export const jwtSecret = process.env.JWT_SECRET || 'secretKey123';
             secret: jwtSecret,
             signOptions: { expiresIn: '1d' },
         }),
+        MailerModule,
     ],
     controllers: [AuthController],
     providers: [AuthService, JwtStrategy],
