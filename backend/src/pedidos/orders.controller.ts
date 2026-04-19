@@ -9,8 +9,8 @@ export class OrdersController {
 
     @Post()
     async createPedido(@Body() body: any, @Request() req: any) {
-        // payload expect: { items: [{ productoId: 1, cantidad: 2 }], direccionEntrega: '...' }
-        return this.ordersService.createPedidoTransaction(req.user.id, body.items, body.direccionEntrega);
+        // payload expect: { items: [{ productoId: 1, cantidad: 2 }], direccionEntrega: '...', metodoPago: '...', montoEfectivo: 100 }
+        return this.ordersService.createPedidoTransaction(req.user.id, body.items, body.direccionEntrega, body.metodoPago, body.montoEfectivo);
     }
 
     @Get('mis-pedidos')

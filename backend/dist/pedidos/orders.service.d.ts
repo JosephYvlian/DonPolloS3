@@ -1,5 +1,5 @@
 import { Repository, DataSource } from 'typeorm';
-import { Pedido } from './pedido.entity';
+import { Pedido, MetodoPago } from './pedido.entity';
 export declare class OrdersService {
     private readonly pedidoRepository;
     private dataSource;
@@ -7,7 +7,7 @@ export declare class OrdersService {
     createPedidoTransaction(usuarioId: number, items: {
         productoId: number;
         cantidad: number;
-    }[], direccionEntrega: string): Promise<{
+    }[], direccionEntrega: string, metodoPago: MetodoPago, montoEfectivo?: number): Promise<{
         message: string;
         pedidoId: number;
     }>;

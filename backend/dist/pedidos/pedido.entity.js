@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Pedido = exports.EstadoPedido = void 0;
+exports.Pedido = exports.MetodoPago = exports.EstadoPedido = void 0;
 const typeorm_1 = require("typeorm");
 const usuario_entity_1 = require("../usuarios/usuario.entity");
 const detalle_pedido_entity_1 = require("./detalle-pedido.entity");
@@ -19,7 +19,17 @@ var EstadoPedido;
     EstadoPedido["PROCESANDO"] = "PROCESANDO";
     EstadoPedido["ENVIADO"] = "ENVIADO";
     EstadoPedido["ENTREGADO"] = "ENTREGADO";
+    EstadoPedido["PAGADO"] = "PAGADO";
+    EstadoPedido["PENDIENTE_PAGO_ENTREGA"] = "PENDIENTE_PAGO_ENTREGA";
+    EstadoPedido["EN_VERIFICACION"] = "En Verificaci\u00F3n";
+    EstadoPedido["PENDIENTE_POR_PAGO"] = "Pendiente por pago";
 })(EstadoPedido || (exports.EstadoPedido = EstadoPedido = {}));
+var MetodoPago;
+(function (MetodoPago) {
+    MetodoPago["TARJETA"] = "TARJETA";
+    MetodoPago["PSE"] = "PSE";
+    MetodoPago["EFECTIVO"] = "EFECTIVO";
+})(MetodoPago || (exports.MetodoPago = MetodoPago = {}));
 let Pedido = class Pedido {
     id;
     usuarioId;
@@ -28,6 +38,8 @@ let Pedido = class Pedido {
     direccionEntrega;
     total;
     estado;
+    metodoPago;
+    montoEfectivo;
     detalles;
 };
 exports.Pedido = Pedido;
@@ -64,6 +76,18 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], Pedido.prototype, "estado", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: MetodoPago,
+        default: MetodoPago.EFECTIVO,
+    }),
+    __metadata("design:type", String)
+], Pedido.prototype, "metodoPago", void 0);
+__decorate([
+    (0, typeorm_1.Column)('decimal', { precision: 10, scale: 2, nullable: true }),
+    __metadata("design:type", Object)
+], Pedido.prototype, "montoEfectivo", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => detalle_pedido_entity_1.DetallePedido, (detalle) => detalle.pedido, { cascade: true }),
     __metadata("design:type", Array)

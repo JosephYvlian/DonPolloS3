@@ -21,6 +21,8 @@ const direccion_entity_1 = require("./direcciones/direccion.entity");
 const direcciones_module_1 = require("./direcciones/direcciones.module");
 const mailer_module_1 = require("./mailer/mailer.module");
 const usuarios_module_1 = require("./usuarios/usuarios.module");
+const tarjeta_entity_1 = require("./tarjetas/tarjeta.entity");
+const tarjetas_module_1 = require("./tarjetas/tarjetas.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -35,7 +37,7 @@ exports.AppModule = AppModule = __decorate([
                 username: process.env.DB_USER || 'donpollo_user',
                 password: process.env.DB_PASSWORD || 'donpollo_password',
                 database: process.env.DB_NAME || 'donpollo_db',
-                entities: [usuario_entity_1.Usuario, producto_entity_1.Producto, pedido_entity_1.Pedido, detalle_pedido_entity_1.DetallePedido, direccion_entity_1.Direccion],
+                entities: [usuario_entity_1.Usuario, producto_entity_1.Producto, pedido_entity_1.Pedido, detalle_pedido_entity_1.DetallePedido, direccion_entity_1.Direccion, tarjeta_entity_1.Tarjeta],
                 synchronize: true,
             }),
             auth_module_1.AuthModule,
@@ -44,6 +46,7 @@ exports.AppModule = AppModule = __decorate([
             direcciones_module_1.DireccionesModule,
             mailer_module_1.MailerModule,
             usuarios_module_1.UsuariosModule,
+            tarjetas_module_1.TarjetasModule,
         ],
     })
 ], AppModule);

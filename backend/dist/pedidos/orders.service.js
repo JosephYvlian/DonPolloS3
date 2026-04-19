@@ -26,7 +26,7 @@ let OrdersService = class OrdersService {
         this.pedidoRepository = pedidoRepository;
         this.dataSource = dataSource;
     }
-    async createPedidoTransaction(usuarioId, items, direccionEntrega) {
+    async createPedidoTransaction(usuarioId, items, direccionEntrega, metodoPago, montoEfectivo) {
         if (!direccionEntrega) {
             throw new common_1.BadRequestException('La dirección de entrega es obligatoria');
         }
@@ -61,9 +61,19 @@ let OrdersService = class OrdersService {
             }
             const nuevoPedido = new pedido_entity_1.Pedido();
             nuevoPedido.usuarioId = usuarioId;
-            nuevoPedido.estado = pedido_entity_1.EstadoPedido.RECIBIDO;
             nuevoPedido.total = totalPedido;
             nuevoPedido.direccionEntrega = direccionEntrega;
+            nuevoPedido.metodoPago = metodoPago || pedido_entity_1.MetodoPago.EFECTIVO;
+            if (nuevoPedido.metodoPago === pedido_entity_1.MetodoPago.EFECTIVO) {
+                nuevoPedido.montoEfectivo = montoEfectivo || null;
+                nuevoPedido.estado = pedido_entity_1.EstadoPedido.PENDIENTE_POR_PAGO;
+            }
+            else if (nuevoPedido.metodoPago === pedido_entity_1.MetodoPago.TARJETA || nuevoPedido.metodoPago === pedido_entity_1.MetodoPago.PSE) {
+                nuevoPedido.estado = pedido_entity_1.EstadoPedido.EN_VERIFICACION;
+            }
+            else {
+                nuevoPedido.estado = pedido_entity_1.EstadoPedido.RECIBIDO;
+            }
             const savedPedido = await queryRunner.manager.save(nuevoPedido);
             for (const detalle of detallesToSave) {
                 detalle.pedidoId = savedPedido.id;

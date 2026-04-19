@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
-import { Pedido, EstadoPedido } from './pedido.entity';
+import { Pedido, EstadoPedido, MetodoPago } from './pedido.entity';
 import { DetallePedido } from './detalle-pedido.entity';
 import { Producto, EstadoProducto } from '../productos/producto.entity';
 
@@ -13,7 +13,7 @@ export class OrdersService {
         private dataSource: DataSource,
     ) { }
 
-    async createPedidoTransaction(usuarioId: number, items: { productoId: number; cantidad: number }[], direccionEntrega: string) {
+    async createPedidoTransaction(usuarioId: number, items: { productoId: number; cantidad: number }[], direccionEntrega: string, metodoPago: MetodoPago, montoEfectivo?: number) {
         if (!direccionEntrega) {
             throw new BadRequestException('La dirección de entrega es obligatoria');
         }
@@ -59,9 +59,20 @@ export class OrdersService {
 
             const nuevoPedido = new Pedido();
             nuevoPedido.usuarioId = usuarioId;
-            nuevoPedido.estado = EstadoPedido.RECIBIDO;
             nuevoPedido.total = totalPedido;
             nuevoPedido.direccionEntrega = direccionEntrega;
+            
+            // Set payment fields and calculate status
+            nuevoPedido.metodoPago = metodoPago || MetodoPago.EFECTIVO;
+            
+            if (nuevoPedido.metodoPago === MetodoPago.EFECTIVO) {
+                nuevoPedido.montoEfectivo = montoEfectivo || null;
+                nuevoPedido.estado = EstadoPedido.PENDIENTE_POR_PAGO;
+            } else if (nuevoPedido.metodoPago === MetodoPago.TARJETA || nuevoPedido.metodoPago === MetodoPago.PSE) {
+                nuevoPedido.estado = EstadoPedido.EN_VERIFICACION;
+            } else {
+                nuevoPedido.estado = EstadoPedido.RECIBIDO;
+            }
 
             const savedPedido = await queryRunner.manager.save(nuevoPedido);
 

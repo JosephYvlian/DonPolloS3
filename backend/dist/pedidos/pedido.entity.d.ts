@@ -4,7 +4,16 @@ export declare enum EstadoPedido {
     RECIBIDO = "RECIBIDO",
     PROCESANDO = "PROCESANDO",
     ENVIADO = "ENVIADO",
-    ENTREGADO = "ENTREGADO"
+    ENTREGADO = "ENTREGADO",
+    PAGADO = "PAGADO",
+    PENDIENTE_PAGO_ENTREGA = "PENDIENTE_PAGO_ENTREGA",
+    EN_VERIFICACION = "En Verificaci\u00F3n",
+    PENDIENTE_POR_PAGO = "Pendiente por pago"
+}
+export declare enum MetodoPago {
+    TARJETA = "TARJETA",
+    PSE = "PSE",
+    EFECTIVO = "EFECTIVO"
 }
 export declare class Pedido {
     id: number;
@@ -14,5 +23,7 @@ export declare class Pedido {
     direccionEntrega: string;
     total: number;
     estado: EstadoPedido;
+    metodoPago: MetodoPago;
+    montoEfectivo: number | null;
     detalles: DetallePedido[];
 }

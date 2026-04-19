@@ -3,13 +3,15 @@ import { api } from '../api/axios';
 import { useStore } from '../store/useStore';
 import { useNavigate, Link } from 'react-router-dom';
 import type { Pedido } from '../types';
-import { Package, Calendar, Clock, ChevronRight, ShoppingBag } from 'lucide-react';
+import { Package, Calendar, Clock, ChevronRight, ShoppingBag, FileText } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { formatCurrency } from '../utils/formatCurrency';
+import InvoiceModal from '../components/InvoiceModal';
 
 export default function Orders() {
     const [pedidos, setPedidos] = useState<Pedido[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedInvoice, setSelectedInvoice] = useState<Pedido | null>(null);
     const { user } = useStore();
     const navigate = useNavigate();
 
@@ -140,14 +142,24 @@ export default function Orders() {
                             )}
 
                             <div className="bg-slate-50 p-3 flex justify-center border-t border-surface-border">
-                                <button className="text-sm text-brand-600 font-bold flex items-center hover:text-brand-700 transition group p-2">
-                                    Ver recibo detallado <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                                <button 
+                                    onClick={() => setSelectedInvoice(pedido)}
+                                    className="text-sm text-brand-600 font-bold flex items-center hover:text-brand-700 transition group p-2"
+                                >
+                                    <FileText className="w-4 h-4 mr-2" />
+                                    Ver Factura DIAN
                                 </button>
                             </div>
                         </div>
                     ))}
                 </div>
             )}
+
+            <InvoiceModal 
+                isOpen={!!selectedInvoice}
+                onClose={() => setSelectedInvoice(null)}
+                pedido={selectedInvoice}
+            />
         </div>
     );
 }

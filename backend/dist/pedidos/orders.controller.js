@@ -22,7 +22,7 @@ let OrdersController = class OrdersController {
         this.ordersService = ordersService;
     }
     async createPedido(body, req) {
-        return this.ordersService.createPedidoTransaction(req.user.id, body.items, body.direccionEntrega);
+        return this.ordersService.createPedidoTransaction(req.user.id, body.items, body.direccionEntrega, body.metodoPago, body.montoEfectivo);
     }
     async getMisPedidos(req) {
         return this.ordersService.findPedidosByUsuario(req.user.id);

@@ -12,6 +12,8 @@ import { Direccion } from './direcciones/direccion.entity';
 import { DireccionesModule } from './direcciones/direcciones.module';
 import { MailerModule } from './mailer/mailer.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
+import { Tarjeta } from './tarjetas/tarjeta.entity';
+import { TarjetasModule } from './tarjetas/tarjetas.module';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { UsuariosModule } from './usuarios/usuarios.module';
       username: process.env.DB_USER || 'donpollo_user',
       password: process.env.DB_PASSWORD || 'donpollo_password',
       database: process.env.DB_NAME || 'donpollo_db',
-      entities: [Usuario, Producto, Pedido, DetallePedido, Direccion],
+      entities: [Usuario, Producto, Pedido, DetallePedido, Direccion, Tarjeta],
       synchronize: true, // Auto-create tables in dev
     }),
     AuthModule,
@@ -32,6 +34,7 @@ import { UsuariosModule } from './usuarios/usuarios.module';
     DireccionesModule,
     MailerModule,
     UsuariosModule,
+    TarjetasModule,
   ],
 })
 export class AppModule { }

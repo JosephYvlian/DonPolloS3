@@ -7,6 +7,16 @@ export enum EstadoPedido {
     PROCESANDO = 'PROCESANDO',
     ENVIADO = 'ENVIADO',
     ENTREGADO = 'ENTREGADO',
+    PAGADO = 'PAGADO',
+    PENDIENTE_PAGO_ENTREGA = 'PENDIENTE_PAGO_ENTREGA',
+    EN_VERIFICACION = 'En Verificación',
+    PENDIENTE_POR_PAGO = 'Pendiente por pago',
+}
+
+export enum MetodoPago {
+    TARJETA = 'TARJETA',
+    PSE = 'PSE',
+    EFECTIVO = 'EFECTIVO',
 }
 
 @Entity('pedidos')
@@ -36,6 +46,16 @@ export class Pedido {
         default: EstadoPedido.RECIBIDO,
     })
     estado: EstadoPedido;
+
+    @Column({
+        type: 'enum',
+        enum: MetodoPago,
+        default: MetodoPago.EFECTIVO,
+    })
+    metodoPago: MetodoPago;
+
+    @Column('decimal', { precision: 10, scale: 2, nullable: true })
+    montoEfectivo: number | null;
 
     @OneToMany(() => DetallePedido, (detalle) => detalle.pedido, { cascade: true })
     detalles: DetallePedido[];

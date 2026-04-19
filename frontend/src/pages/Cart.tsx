@@ -5,6 +5,7 @@ import { api } from '../api/axios';
 import { Trash2, MapPin, Plus } from 'lucide-react';
 import { formatCurrency } from '../utils/formatCurrency';
 import toast from 'react-hot-toast';
+import CheckoutModal from '../components/CheckoutModal';
 
 interface Direccion {
     id: number;
@@ -20,6 +21,7 @@ export default function Cart() {
     const [loadingDir, setLoadingDir] = useState(false);
     const [direcciones, setDirecciones] = useState<Direccion[]>([]);
     const [selectedDir, setSelectedDir] = useState<number | null>(null);
+    const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -43,7 +45,7 @@ export default function Cart() {
         }
     };
 
-    const handleCheckout = async () => {
+    const handleOpenCheckout = () => {
         if (!user) {
             navigate('/login');
             return;
@@ -54,7 +56,12 @@ export default function Cart() {
             return;
         }
 
+        setIsCheckoutModalOpen(true);
+    };
+
+    const handlePaymentSuccess = async (metodoPago: string, montoEfectivo: number | null) => {
         setLoading(true);
+        setIsCheckoutModalOpen(false);
 
         try {
             const dirSeleccionada = direcciones.find(d => d.id === selectedDir);
@@ -65,12 +72,17 @@ export default function Cart() {
                 cantidad: item.cantidad,
             }));
 
-            await api.post('/pedidos', { items, direccionEntrega: direccionStr });
+            await api.post('/pedidos', { 
+                items, 
+                direccionEntrega: direccionStr,
+                metodoPago,
+                montoEfectivo
+            });
+            
             clearCart();
-            toast.success('¡Pedido confirmado exitosamente!');
             navigate('/orders');
         } catch (err: any) {
-            toast.error(err.response?.data?.message || 'Error al procesar el pedido. Verifica el stock.');
+            toast.error(err.response?.data?.message || 'Error al procesar el pedido en el servidor.');
         } finally {
             setLoading(false);
         }
@@ -193,7 +205,7 @@ export default function Cart() {
                         </div>
                     </div>
                     <button
-                        onClick={handleCheckout}
+                        onClick={handleOpenCheckout}
                         disabled={loading || !!(user && (direcciones.length === 0 || !selectedDir))}
                         className="w-full btn-primary py-3.5 flex items-center justify-center text-lg"
                     >
@@ -207,6 +219,13 @@ export default function Cart() {
                 </div>
             </div>
             </div>
+
+            <CheckoutModal 
+                isOpen={isCheckoutModalOpen}
+                onClose={() => setIsCheckoutModalOpen(false)}
+                totalAmount={cartTotal()}
+                onPaymentSuccess={handlePaymentSuccess}
+            />
         </div>
     );
 }
