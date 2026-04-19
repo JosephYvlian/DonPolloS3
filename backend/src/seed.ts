@@ -1,8 +1,8 @@
 import { Connection, createConnection } from 'typeorm';
-import { Producto, EstadoProducto } from './src/productos/producto.entity';
-import { Usuario, RolUsuario } from './src/usuarios/usuario.entity';
-import { Pedido } from './src/pedidos/pedido.entity';
-import { DetallePedido } from './src/pedidos/detalle-pedido.entity';
+import { Producto, EstadoProducto } from './productos/producto.entity';
+import { Usuario, RolUsuario } from './usuarios/usuario.entity';
+import { Pedido } from './pedidos/pedido.entity';
+import { DetallePedido } from './pedidos/detalle-pedido.entity';
 import * as bcrypt from 'bcrypt';
 
 async function seed() {

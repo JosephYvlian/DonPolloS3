@@ -1,0 +1,245 @@
+{
+	"info": {
+		"_postman_id": "e4f8d5a1-7b3b-4c5c-9c9c-1c1c1c1c1c1c",
+		"name": "DonPollo API",
+		"description": "Colección de APIs para el proyecto Don Pollo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Autenticación",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [{"key":"Content-Type","value":"application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"correo\": \"usuario@ejemplo.com\",\r\n  \"passwordHash\": \"contraseña123\",\r\n  \"nombreCompleto\": \"Juan Perez\",\r\n  \"telefono\": \"123456789\"\r\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/auth/register","host": ["{{baseUrl}}"],"path": ["auth","register"]}
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [{"key":"Content-Type","value":"application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"correo\": \"usuario@ejemplo.com\",\r\n  \"password\": \"contraseña123\"\r\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/auth/login","host": ["{{baseUrl}}"],"path": ["auth","login"]}
+					}
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [{"key":"Content-Type","value":"application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"correo\": \"usuario@ejemplo.com\"\r\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/auth/forgot-password","host": ["{{baseUrl}}"],"path": ["auth","forgot-password"]}
+					}
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [{"key":"Content-Type","value":"application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"token\": \"token_recibido_en_correo\",\r\n  \"newPassword\": \"nueva_contraseña\"\r\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/auth/reset-password","host": ["{{baseUrl}}"],"path": ["auth","reset-password"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Usuarios",
+			"item": [
+				{
+					"name": "Obtener Perfil",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token","value": "{{token}}","type": "string"}]},
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/usuarios/profile","host": ["{{baseUrl}}"],"path": ["usuarios","profile"]}
+					}
+				},
+				{
+					"name": "Actualizar Perfil",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token","value": "{{token}}","type": "string"}]},
+						"method": "PUT",
+						"header": [{"key":"Content-Type","value":"application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombreCompleto\": \"Juan Actualizado\",\r\n  \"telefono\": \"987654321\"\r\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/usuarios/profile","host": ["{{baseUrl}}"],"path": ["usuarios","profile"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Productos",
+			"item": [
+				{
+					"name": "Obtener Productos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/productos","host": ["{{baseUrl}}"],"path": ["productos"]}
+					}
+				},
+				{
+					"name": "Crear Producto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{"key": "nombre","value": "Hamburguesa Especial","type": "text"},
+								{"key": "descripcion","value": "Deliciosa con extra queso","type": "text"},
+								{"key": "precio","value": "15000","type": "text"},
+								{"key": "stockDisponible","value": "20","type": "text"},
+								{"key": "imagen","type": "file","src": []}
+							]
+						},
+						"url": {"raw": "{{baseUrl}}/productos","host": ["{{baseUrl}}"],"path": ["productos"]}
+					}
+				},
+				{
+					"name": "Actualizar Producto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{"key": "nombre","value": "Hamburguesa Modificada","type": "text"},
+								{"key": "precio","value": "16000","type": "text"}
+							]
+						},
+						"url": {"raw": "{{baseUrl}}/productos/1","host": ["{{baseUrl}}"],"path": ["productos","1"]}
+					}
+				},
+				{
+					"name": "Eliminar Producto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/productos/1","host": ["{{baseUrl}}"],"path": ["productos","1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Pedidos",
+			"item": [
+				{
+					"name": "Mis Pedidos",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token","value": "{{token}}","type": "string"}]},
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/pedidos/mis-pedidos","host": ["{{baseUrl}}"],"path": ["pedidos","mis-pedidos"]}
+					}
+				},
+				{
+					"name": "Crear Pedido",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token","value": "{{token}}","type": "string"}]},
+						"method": "POST",
+						"header": [{"key":"Content-Type","value":"application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"items\": [\r\n    { \"productoId\": 1, \"cantidad\": 2 },\r\n    { \"productoId\": 3, \"cantidad\": 1 }\r\n  ],\r\n  \"direccionEntrega\": \"Calle Falsa 123\"\r\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/pedidos","host": ["{{baseUrl}}"],"path": ["pedidos"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Direcciones",
+			"item": [
+				{
+					"name": "Obtener Direcciones",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token","value": "{{token}}","type": "string"}]},
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/direcciones","host": ["{{baseUrl}}"],"path": ["direcciones"]}
+					}
+				},
+				{
+					"name": "Crear Direccion",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token","value": "{{token}}","type": "string"}]},
+						"method": "POST",
+						"header": [{"key":"Content-Type","value":"application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"direccion\": \"Av. Principal 456\",\r\n  \"ciudad\": \"Bogota\",\r\n  \"barrio\": \"Centro\",\r\n  \"detalles\": \"Apto 101\"\r\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/direcciones","host": ["{{baseUrl}}"],"path": ["direcciones"]}
+					}
+				},
+				{
+					"name": "Actualizar Direccion",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token","value": "{{token}}","type": "string"}]},
+						"method": "PUT",
+						"header": [{"key":"Content-Type","value":"application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"detalles\": \"Apto 102\"\r\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/direcciones/1","host": ["{{baseUrl}}"],"path": ["direcciones","1"]}
+					}
+				},
+				{
+					"name": "Eliminar Direccion",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token","value": "{{token}}","type": "string"}]},
+						"method": "DELETE",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/direcciones/1","host": ["{{baseUrl}}"],"path": ["direcciones","1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "6. General",
+			"item": [
+				{
+					"name": "Ping App",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/","host": ["{{baseUrl}}"],"path": []}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "default"
+		},
+		{
+			"key": "token",
+			"value": "pega_aqui_el_token_generado",
+			"type": "default"
+		}
+	]
+}

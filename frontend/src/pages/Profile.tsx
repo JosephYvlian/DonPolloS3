@@ -138,7 +138,7 @@ export default function Profile() {
                                 <input
                                     type="tel"
                                     value={telefono}
-                                    onChange={(e) => setTelefono(e.target.value)}
+                                    onChange={(e) => setTelefono(e.target.value.replace(/\D/g, ''))}
                                     className="input-field"
                                 />
                             </div>

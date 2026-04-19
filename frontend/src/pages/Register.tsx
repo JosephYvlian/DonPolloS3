@@ -16,6 +16,13 @@ export default function Register() {
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        if (!passwordRegex.test(formData.passwordHash)) {
+            toast.error('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.');
+            return;
+        }
+
         setLoading(true);
         try {
             await api.post('/auth/register', formData);
@@ -89,9 +96,9 @@ export default function Register() {
                                 value={formData.passwordHash}
                                 onChange={(e) => setFormData({ ...formData, passwordHash: e.target.value })}
                                 className="input-field pl-11"
-                                placeholder="Mínimo 6 caracteres"
+                                placeholder="Min. 8 caracteres, mayúscula, número y especial"
                                 required
-                                minLength={6}
+                                minLength={8}
                             />
                         </div>
                     </div>
@@ -106,7 +113,7 @@ export default function Register() {
                                 id="telefono"
                                 type="tel"
                                 value={formData.telefono}
-                                onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+                                onChange={(e) => setFormData({ ...formData, telefono: e.target.value.replace(/\D/g, '') })}
                                 className="input-field pl-11"
                                 placeholder="320 123 4567"
                                 required

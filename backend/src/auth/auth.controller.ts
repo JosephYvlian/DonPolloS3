@@ -10,6 +10,16 @@ export class AuthController {
         if (!body.correo || !body.passwordHash || !body.nombreCompleto || !body.telefono) {
             throw new BadRequestException('Faltan campos obligatorios');
         }
+
+        if (!/^\d+$/.test(body.telefono)) {
+            throw new BadRequestException('El campo teléfono solo debe contener números');
+        }
+        
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        if (!passwordRegex.test(body.passwordHash)) {
+            throw new BadRequestException('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.');
+        }
+
         return this.authService.register(body);
     }
 
