@@ -12,6 +12,13 @@ export default function ResetPassword() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        if (!passwordRegex.test(newPassword)) {
+            toast.error('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.');
+            return;
+        }
+
         setLoading(true);
         try {
             await api.post('/auth/reset-password', { token, newPassword });
@@ -64,8 +71,8 @@ export default function ResetPassword() {
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
                                 className="input-field pl-11"
-                                placeholder="Mínimo 6 caracteres"
-                                minLength={6}
+                                placeholder="Min. 8 caracteres, mayúscula, número y especial"
+                                minLength={8}
                                 required
                             />
                         </div>

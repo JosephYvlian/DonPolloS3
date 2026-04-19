@@ -53,6 +53,10 @@ let AuthController = class AuthController {
         if (!body.token || !body.newPassword) {
             throw new common_1.BadRequestException('El token y la nueva contraseña son requeridos');
         }
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        if (!passwordRegex.test(body.newPassword)) {
+            throw new common_1.BadRequestException('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.');
+        }
         return this.authService.resetPassword(body.token, body.newPassword);
     }
 };
