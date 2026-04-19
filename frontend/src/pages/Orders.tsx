@@ -3,7 +3,7 @@ import { api } from '../api/axios';
 import { useStore } from '../store/useStore';
 import { useNavigate, Link } from 'react-router-dom';
 import type { Pedido } from '../types';
-import { Package, Calendar, Clock, ChevronRight, ShoppingBag, FileText } from 'lucide-react';
+import { Package, Calendar, Clock, ShoppingBag, FileText } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { formatCurrency } from '../utils/formatCurrency';
 import InvoiceModal from '../components/InvoiceModal';

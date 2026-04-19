@@ -22,5 +22,7 @@ export interface Pedido {
     total: number;
     estado: string;
     direccionEntrega?: string;
+    metodoPago?: string;
+    montoEfectivo?: number | null;
     detalles: any[];
 }
