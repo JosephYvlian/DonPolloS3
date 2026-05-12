@@ -1,5 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UploadedFile, UseInterceptors, UseGuards } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AdminGuard } from '../auth/admin.guard';
 import { ProductsService } from './products.service';
 
 @Controller('productos')
@@ -12,6 +14,7 @@ export class ProductsController {
     }
 
     @Post()
+    @UseGuards(JwtAuthGuard, AdminGuard)
     @UseInterceptors(FileInterceptor('imagen'))
     async create(
         @Body() productoData: any,
@@ -27,6 +30,7 @@ export class ProductsController {
     }
 
     @Put(':id')
+    @UseGuards(JwtAuthGuard, AdminGuard)
     @UseInterceptors(FileInterceptor('imagen'))
     async update(
         @Param('id') id: string,
@@ -42,6 +46,7 @@ export class ProductsController {
     }
 
     @Delete(':id')
+    @UseGuards(JwtAuthGuard, AdminGuard)
     async remove(@Param('id') id: string) {
         return this.productsService.delete(+id);
     }

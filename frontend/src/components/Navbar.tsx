@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
-import { ShoppingCart, LogOut, Package, User } from 'lucide-react';
+import { ShoppingCart, LogOut, Package, User, ShoppingBag, Receipt } from 'lucide-react';
 import clsx from 'clsx';
 
 export default function Navbar() {
@@ -15,7 +15,7 @@ export default function Navbar() {
     const cartItemsCount = cart.reduce((total, item) => total + item.cantidad, 0);
 
     return (
-        <nav className="bg-white border-b border-surface-border shadow-sm sticky top-0 z-40 bg-opacity-90 backdrop-blur-md">
+        <nav className="bg-white border-b border-surface-border shadow-sm sticky top-0 z-40 bg-opacity-90 backdrop-blur-md print:hidden">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
                 <Link to="/" className="flex items-center transition group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded px-2 -ml-2 py-1">
                     <img src="https://res.cloudinary.com/dvpt0r0wz/image/upload/v1741581139/donpollo/logo.png" alt="Don Pollo" className="h-12 sm:h-14 w-auto scale-[1.3] md:scale-[1.5] origin-left group-hover:drop-shadow-md transition-all duration-300" />
@@ -41,20 +41,48 @@ export default function Navbar() {
 
                     {user ? (
                         <div className="flex items-center space-x-1 sm:space-x-3">
-                            <Link
-                                to="/profile"
-                                className="hidden sm:flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
-                            >
-                                <User className="w-5 h-5 mr-1.5 text-slate-400" />
-                                <span>Mi Perfil</span>
-                            </Link>
-                            <Link
-                                to="/orders"
-                                className="hidden sm:flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
-                            >
-                                <Package className="w-5 h-5 mr-1.5 text-slate-400" />
-                                <span>Mis Pedidos</span>
-                            </Link>
+                            {user.rol === 'ADMINISTRADOR' ? (
+                                <>
+                                    <Link
+                                        to="/admin/productos"
+                                        className="hidden sm:flex items-center px-3 py-2 rounded-lg text-sm font-bold text-brand-600 bg-brand-50 hover:bg-brand-100 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                                    >
+                                        <Package className="w-5 h-5 mr-1.5" />
+                                        <span>Productos</span>
+                                    </Link>
+                                    <Link
+                                        to="/admin/pedidos"
+                                        className="hidden sm:flex items-center px-3 py-2 rounded-lg text-sm font-bold text-brand-600 bg-brand-50 hover:bg-brand-100 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                                    >
+                                        <ShoppingBag className="w-5 h-5 mr-1.5" />
+                                        <span>Pedidos</span>
+                                    </Link>
+                                    <Link
+                                        to="/admin/facturacion"
+                                        className="hidden sm:flex items-center px-3 py-2 rounded-lg text-sm font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                                    >
+                                        <Receipt className="w-5 h-5 mr-1.5" />
+                                        <span>Facturación</span>
+                                    </Link>
+                                </>
+                            ) : (
+                                <>
+                                    <Link
+                                        to="/profile"
+                                        className="hidden sm:flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                                    >
+                                        <User className="w-5 h-5 mr-1.5 text-slate-400" />
+                                        <span>Mi Perfil</span>
+                                    </Link>
+                                    <Link
+                                        to="/orders"
+                                        className="hidden sm:flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                                    >
+                                        <Package className="w-5 h-5 mr-1.5 text-slate-400" />
+                                        <span>Mis Pedidos</span>
+                                    </Link>
+                                </>
+                            )}
                             <div className="hidden md:flex items-center px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100">
                                 <span className="text-sm font-semibold text-slate-700 truncate max-w-[150px]">{user.nombreCompleto}</span>
                             </div>
@@ -82,3 +110,13 @@ export default function Navbar() {
         </nav>
     );
 }
+
+function ShieldIcon(props: any) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+            <path d="m9 12 2 2 4-4" />
+        </svg>
+    )
+}
+

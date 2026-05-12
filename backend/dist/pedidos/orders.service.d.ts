@@ -1,5 +1,5 @@
 import { Repository, DataSource } from 'typeorm';
-import { Pedido, MetodoPago } from './pedido.entity';
+import { Pedido, EstadoPedido, MetodoPago } from './pedido.entity';
 export declare class OrdersService {
     private readonly pedidoRepository;
     private dataSource;
@@ -10,6 +10,14 @@ export declare class OrdersService {
     }[], direccionEntrega: string, metodoPago: MetodoPago, montoEfectivo?: number): Promise<{
         message: string;
         pedidoId: number;
+        init_point: string | undefined;
+    } | {
+        message: string;
+        pedidoId: number;
+        init_point?: undefined;
     }>;
     findPedidosByUsuario(usuarioId: number): Promise<Pedido[]>;
+    findAllPedidosAdmin(): Promise<Pedido[]>;
+    updatePedidoStatus(id: number, estado: EstadoPedido): Promise<Pedido>;
+    updatePedidoEntregaStatus(id: number, estadoEntrega: string): Promise<Pedido>;
 }

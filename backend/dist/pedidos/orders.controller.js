@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrdersController = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const admin_guard_1 = require("../auth/admin.guard");
 const orders_service_1 = require("./orders.service");
 let OrdersController = class OrdersController {
     ordersService;
@@ -26,6 +27,15 @@ let OrdersController = class OrdersController {
     }
     async getMisPedidos(req) {
         return this.ordersService.findPedidosByUsuario(req.user.id);
+    }
+    async getAllPedidos() {
+        return this.ordersService.findAllPedidosAdmin();
+    }
+    async updatePedidoStatus(id, estado) {
+        return this.ordersService.updatePedidoStatus(+id, estado);
+    }
+    async updatePedidoEntregaStatus(id, estadoEntrega) {
+        return this.ordersService.updatePedidoEntregaStatus(+id, estadoEntrega);
     }
 };
 exports.OrdersController = OrdersController;
@@ -44,6 +54,31 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "getMisPedidos", null);
+__decorate([
+    (0, common_1.Get)('all'),
+    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], OrdersController.prototype, "getAllPedidos", null);
+__decorate([
+    (0, common_1.Put)(':id/estado'),
+    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)('estado')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], OrdersController.prototype, "updatePedidoStatus", null);
+__decorate([
+    (0, common_1.Put)(':id/estado-entrega'),
+    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)('estadoEntrega')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], OrdersController.prototype, "updatePedidoEntregaStatus", null);
 exports.OrdersController = OrdersController = __decorate([
     (0, common_1.Controller)('pedidos'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),

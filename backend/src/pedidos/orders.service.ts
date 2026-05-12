@@ -1,4 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
+import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Pedido, EstadoPedido, MetodoPago } from './pedido.entity';
@@ -29,6 +30,7 @@ export class OrdersService {
         try {
             let totalPedido = 0;
             const detallesToSave = [];
+            const itemsMp = [];
 
             for (const item of items) {
                 // Bloqueo pesimista para evitar race conditions
@@ -55,6 +57,13 @@ export class OrdersService {
                 detalle.cantidad = item.cantidad;
                 detalle.precioUnitario = producto.precio;
                 detallesToSave.push(detalle);
+
+                itemsMp.push({
+                    id: producto.id.toString(),
+                    title: producto.nombre,
+                    quantity: item.cantidad,
+                    unit_price: Number(producto.precio),
+                });
             }
 
             const nuevoPedido = new Pedido();
@@ -67,11 +76,11 @@ export class OrdersService {
             
             if (nuevoPedido.metodoPago === MetodoPago.EFECTIVO) {
                 nuevoPedido.montoEfectivo = montoEfectivo || null;
-                nuevoPedido.estado = EstadoPedido.PENDIENTE_POR_PAGO;
-            } else if (nuevoPedido.metodoPago === MetodoPago.TARJETA || nuevoPedido.metodoPago === MetodoPago.PSE) {
-                nuevoPedido.estado = EstadoPedido.EN_VERIFICACION;
+                nuevoPedido.estado = EstadoPedido.PAGO_PENDIENTE;
+            } else if (nuevoPedido.metodoPago === MetodoPago.TARJETA || nuevoPedido.metodoPago === MetodoPago.PSE || nuevoPedido.metodoPago === MetodoPago.MERCADOPAGO) {
+                nuevoPedido.estado = EstadoPedido.PAGO_PENDIENTE;
             } else {
-                nuevoPedido.estado = EstadoPedido.RECIBIDO;
+                nuevoPedido.estado = EstadoPedido.PAGO_PENDIENTE;
             }
 
             const savedPedido = await queryRunner.manager.save(nuevoPedido);
@@ -82,6 +91,35 @@ export class OrdersService {
             }
 
             await queryRunner.commitTransaction();
+
+            if (metodoPago === MetodoPago.MERCADOPAGO) {
+                try {
+                    const client = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN || '' });
+                    const preference = new Preference(client);
+
+                    const response = await preference.create({
+                        body: {
+                            items: itemsMp,
+                            back_urls: {
+                                success: 'http://localhost:5173/orders?status=success',
+                                failure: 'http://localhost:5173/orders?status=failure',
+                                pending: 'http://localhost:5173/orders?status=pending'
+                            },
+                            external_reference: savedPedido.id.toString(),
+                        }
+                    });
+
+                    return { 
+                        message: 'Pedido creado, redirigiendo a Mercado Pago', 
+                        pedidoId: savedPedido.id,
+                        init_point: response.sandbox_init_point 
+                    };
+                } catch (mpError) {
+                    console.error('Error al crear preferencia de Mercado Pago:', mpError);
+                    throw new BadRequestException('Error al inicializar la pasarela de pagos');
+                }
+            }
+
             return { message: 'Pedido creado exitosamente', pedidoId: savedPedido.id };
         } catch (err) {
             await queryRunner.rollbackTransaction();
@@ -97,5 +135,34 @@ export class OrdersService {
             relations: ['detalles', 'detalles.producto'],
             order: { fechaPedido: 'DESC' },
         });
+    }
+
+    async findAllPedidosAdmin() {
+        return this.pedidoRepository.find({
+            relations: ['usuario', 'detalles', 'detalles.producto'],
+            order: { fechaPedido: 'DESC' },
+        });
+    }
+
+    async updatePedidoStatus(id: number, estado: EstadoPedido) {
+        const pedido = await this.pedidoRepository.findOne({ where: { id } });
+        if (!pedido) {
+            throw new BadRequestException('Pedido no encontrado');
+        }
+        pedido.estado = estado;
+        // Al confirmar pago exitoso, iniciar automáticamente el flujo de entrega
+        if (estado === EstadoPedido.PAGO_EXITOSO && !pedido.estadoEntrega) {
+            pedido.estadoEntrega = 'Pedido Recibido';
+        }
+        return this.pedidoRepository.save(pedido);
+    }
+
+    async updatePedidoEntregaStatus(id: number, estadoEntrega: string) {
+        const pedido = await this.pedidoRepository.findOne({ where: { id } });
+        if (!pedido) {
+            throw new BadRequestException('Pedido no encontrado');
+        }
+        pedido.estadoEntrega = estadoEntrega;
+        return this.pedidoRepository.save(pedido);
     }
 }

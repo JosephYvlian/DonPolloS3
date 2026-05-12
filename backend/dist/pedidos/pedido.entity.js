@@ -15,20 +15,22 @@ const usuario_entity_1 = require("../usuarios/usuario.entity");
 const detalle_pedido_entity_1 = require("./detalle-pedido.entity");
 var EstadoPedido;
 (function (EstadoPedido) {
-    EstadoPedido["RECIBIDO"] = "RECIBIDO";
-    EstadoPedido["PROCESANDO"] = "PROCESANDO";
-    EstadoPedido["ENVIADO"] = "ENVIADO";
-    EstadoPedido["ENTREGADO"] = "ENTREGADO";
-    EstadoPedido["PAGADO"] = "PAGADO";
-    EstadoPedido["PENDIENTE_PAGO_ENTREGA"] = "PENDIENTE_PAGO_ENTREGA";
-    EstadoPedido["EN_VERIFICACION"] = "En Verificaci\u00F3n";
-    EstadoPedido["PENDIENTE_POR_PAGO"] = "Pendiente por pago";
+    EstadoPedido["PAGO_PENDIENTE"] = "Pago Pendiente";
+    EstadoPedido["PAGO_RECHAZADO"] = "Pago Rechazado";
+    EstadoPedido["PAGO_EXITOSO"] = "Pago Exitoso";
+    EstadoPedido["PEDIDO_RECIBIDO"] = "Pedido Recibido";
+    EstadoPedido["EN_PREPARACION"] = "En Preparaci\u00F3n";
+    EstadoPedido["PEDIDO_EN_CAMINO"] = "Pedido en Camino";
+    EstadoPedido["PEDIDO_ENTREGADO"] = "Pedido Entregado";
+    EstadoPedido["EN_CAMINO"] = "En camino";
+    EstadoPedido["ENTREGADO"] = "Entregado";
 })(EstadoPedido || (exports.EstadoPedido = EstadoPedido = {}));
 var MetodoPago;
 (function (MetodoPago) {
     MetodoPago["TARJETA"] = "TARJETA";
     MetodoPago["PSE"] = "PSE";
     MetodoPago["EFECTIVO"] = "EFECTIVO";
+    MetodoPago["MERCADOPAGO"] = "MERCADOPAGO";
 })(MetodoPago || (exports.MetodoPago = MetodoPago = {}));
 let Pedido = class Pedido {
     id;
@@ -39,6 +41,7 @@ let Pedido = class Pedido {
     total;
     estado;
     metodoPago;
+    estadoEntrega;
     montoEfectivo;
     detalles;
 };
@@ -72,7 +75,7 @@ __decorate([
     (0, typeorm_1.Column)({
         type: 'enum',
         enum: EstadoPedido,
-        default: EstadoPedido.RECIBIDO,
+        default: EstadoPedido.PAGO_PENDIENTE,
     }),
     __metadata("design:type", String)
 ], Pedido.prototype, "estado", void 0);
@@ -84,6 +87,10 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], Pedido.prototype, "metodoPago", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', nullable: true, default: null }),
+    __metadata("design:type", Object)
+], Pedido.prototype, "estadoEntrega", void 0);
 __decorate([
     (0, typeorm_1.Column)('decimal', { precision: 10, scale: 2, nullable: true }),
     __metadata("design:type", Object)

@@ -72,7 +72,7 @@ export default function Cart() {
                 cantidad: item.cantidad,
             }));
 
-            await api.post('/pedidos', { 
+            const res = await api.post('/pedidos', { 
                 items, 
                 direccionEntrega: direccionStr,
                 metodoPago,
@@ -80,7 +80,12 @@ export default function Cart() {
             });
             
             clearCart();
-            navigate('/orders');
+            
+            if (res.data.init_point) {
+                window.location.href = res.data.init_point;
+            } else {
+                navigate('/orders');
+            }
         } catch (err: any) {
             toast.error(err.response?.data?.message || 'Error al procesar el pedido en el servidor.');
         } finally {

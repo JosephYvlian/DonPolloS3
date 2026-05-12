@@ -1,4 +1,5 @@
 import { X, Printer, FileText, CheckCircle2 } from 'lucide-react';
+import clsx from 'clsx';
 import type { Pedido } from '../types';
 import { formatCurrency } from '../utils/formatCurrency';
 import { useStore } from '../store/useStore';
@@ -50,7 +51,7 @@ export default function InvoiceModal({ isOpen, onClose, pedido }: InvoiceModalPr
                 </div>
 
                 {/* CUERPO DE LA FACTURA */}
-                <div className="p-8 sm:p-12 bg-white print:p-0 text-slate-800 text-sm">
+                <div className="p-8 sm:p-12 bg-white print:p-0 text-slate-800 text-sm print-area">
                     {/* Cabezote Forma DIAN */}
                     <div className="flex flex-col sm:flex-row justify-between items-start border-b-2 border-slate-800 pb-6 mb-6">
                         <div className="mb-4 sm:mb-0">
@@ -129,12 +130,13 @@ export default function InvoiceModal({ isOpen, onClose, pedido }: InvoiceModalPr
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-slate-600 font-medium">Estado</span>
-                                        <span className="flex items-center font-bold text-emerald-600">
-                                            {pedido.estado === 'PAGADO' || pedido.estado === 'ENTREGADO' ? (
-                                                <><CheckCircle2 className="w-3 h-3 mr-1" /> Pagado Exitosamente</>
-                                            ) : (
-                                                'Pendiente de Pago'
-                                            )}
+                                        <span className={clsx(
+                                            "flex items-center font-bold",
+                                            (pedido.estado === 'Pago Exitoso' || pedido.estado === 'Entregado' || pedido.estado === 'En camino') ? 'text-emerald-600' : 
+                                            pedido.estado === 'Pago Rechazado' ? 'text-red-600' : 'text-amber-600'
+                                        )}>
+                                            {(pedido.estado === 'Pago Exitoso' || pedido.estado === 'Entregado' || pedido.estado === 'En camino') && <CheckCircle2 className="w-3 h-3 mr-1" />}
+                                            {pedido.estado || 'Pago Pendiente'}
                                         </span>
                                     </div>
                                     {pedido.metodoPago === 'EFECTIVO' && pedido.montoEfectivo && (

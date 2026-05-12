@@ -3,20 +3,25 @@ import { Usuario } from '../usuarios/usuario.entity';
 import { DetallePedido } from './detalle-pedido.entity';
 
 export enum EstadoPedido {
-    RECIBIDO = 'RECIBIDO',
-    PROCESANDO = 'PROCESANDO',
-    ENVIADO = 'ENVIADO',
-    ENTREGADO = 'ENTREGADO',
-    PAGADO = 'PAGADO',
-    PENDIENTE_PAGO_ENTREGA = 'PENDIENTE_PAGO_ENTREGA',
-    EN_VERIFICACION = 'En Verificación',
-    PENDIENTE_POR_PAGO = 'Pendiente por pago',
+    // Estados de Facturación / Pago
+    PAGO_PENDIENTE = 'Pago Pendiente',
+    PAGO_RECHAZADO = 'Pago Rechazado',
+    PAGO_EXITOSO = 'Pago Exitoso',
+    // Estados de Entrega / Logística
+    PEDIDO_RECIBIDO = 'Pedido Recibido',
+    EN_PREPARACION = 'En Preparación',
+    PEDIDO_EN_CAMINO = 'Pedido en Camino',
+    PEDIDO_ENTREGADO = 'Pedido Entregado',
+    // Legados (mantener para compatibilidad con registros existentes)
+    EN_CAMINO = 'En camino',
+    ENTREGADO = 'Entregado',
 }
 
 export enum MetodoPago {
     TARJETA = 'TARJETA',
     PSE = 'PSE',
     EFECTIVO = 'EFECTIVO',
+    MERCADOPAGO = 'MERCADOPAGO',
 }
 
 @Entity('pedidos')
@@ -43,7 +48,7 @@ export class Pedido {
     @Column({
         type: 'enum',
         enum: EstadoPedido,
-        default: EstadoPedido.RECIBIDO,
+        default: EstadoPedido.PAGO_PENDIENTE,
     })
     estado: EstadoPedido;
 
@@ -53,6 +58,9 @@ export class Pedido {
         default: MetodoPago.EFECTIVO,
     })
     metodoPago: MetodoPago;
+
+    @Column({ type: 'varchar', nullable: true, default: null })
+    estadoEntrega: string | null;
 
     @Column('decimal', { precision: 10, scale: 2, nullable: true })
     montoEfectivo: number | null;

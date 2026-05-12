@@ -1,5 +1,6 @@
-import { Controller, Post, Get, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Get, Put, Param, Body, UseGuards, Request } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AdminGuard } from '../auth/admin.guard';
 import { OrdersService } from './orders.service';
 
 @Controller('pedidos')
@@ -16,5 +17,23 @@ export class OrdersController {
     @Get('mis-pedidos')
     async getMisPedidos(@Request() req: any) {
         return this.ordersService.findPedidosByUsuario(req.user.id);
+    }
+
+    @Get('all')
+    @UseGuards(AdminGuard)
+    async getAllPedidos() {
+        return this.ordersService.findAllPedidosAdmin();
+    }
+
+    @Put(':id/estado')
+    @UseGuards(AdminGuard)
+    async updatePedidoStatus(@Param('id') id: string, @Body('estado') estado: string) {
+        return this.ordersService.updatePedidoStatus(+id, estado as any);
+    }
+
+    @Put(':id/estado-entrega')
+    @UseGuards(AdminGuard)
+    async updatePedidoEntregaStatus(@Param('id') id: string, @Body('estadoEntrega') estadoEntrega: string) {
+        return this.ordersService.updatePedidoEntregaStatus(+id, estadoEntrega);
     }
 }

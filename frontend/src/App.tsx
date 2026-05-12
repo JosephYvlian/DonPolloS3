@@ -10,6 +10,9 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Profile from './pages/Profile';
 import Cart from './pages/Cart';
+import AdminProducts from './pages/AdminProducts';
+import AdminOrders from './pages/AdminOrders';
+import AdminBilling from './pages/AdminBilling';
 
 function App() {
   return (
@@ -40,6 +43,9 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/admin/productos" element={<AdminProducts />} />
+            <Route path="/admin/pedidos" element={<AdminOrders />} />
+            <Route path="/admin/facturacion" element={<AdminBilling />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
