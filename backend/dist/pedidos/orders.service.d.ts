@@ -20,4 +20,7 @@ export declare class OrdersService {
     findAllPedidosAdmin(): Promise<Pedido[]>;
     updatePedidoStatus(id: number, estado: EstadoPedido): Promise<Pedido>;
     updatePedidoEntregaStatus(id: number, estadoEntrega: string): Promise<Pedido>;
+    handleWebhook(body: any): Promise<{
+        received: boolean;
+    }>;
 }

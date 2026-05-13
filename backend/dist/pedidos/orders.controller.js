@@ -37,10 +37,14 @@ let OrdersController = class OrdersController {
     async updatePedidoEntregaStatus(id, estadoEntrega) {
         return this.ordersService.updatePedidoEntregaStatus(+id, estadoEntrega);
     }
+    async handleWebhook(body) {
+        return this.ordersService.handleWebhook(body);
+    }
 };
 exports.OrdersController = OrdersController;
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
@@ -49,6 +53,7 @@ __decorate([
 ], OrdersController.prototype, "createPedido", null);
 __decorate([
     (0, common_1.Get)('mis-pedidos'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -56,14 +61,14 @@ __decorate([
 ], OrdersController.prototype, "getMisPedidos", null);
 __decorate([
     (0, common_1.Get)('all'),
-    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, admin_guard_1.AdminGuard),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "getAllPedidos", null);
 __decorate([
     (0, common_1.Put)(':id/estado'),
-    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, admin_guard_1.AdminGuard),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)('estado')),
     __metadata("design:type", Function),
@@ -72,16 +77,22 @@ __decorate([
 ], OrdersController.prototype, "updatePedidoStatus", null);
 __decorate([
     (0, common_1.Put)(':id/estado-entrega'),
-    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, admin_guard_1.AdminGuard),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)('estadoEntrega')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "updatePedidoEntregaStatus", null);
+__decorate([
+    (0, common_1.Post)('webhook'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], OrdersController.prototype, "handleWebhook", null);
 exports.OrdersController = OrdersController = __decorate([
     (0, common_1.Controller)('pedidos'),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __metadata("design:paramtypes", [orders_service_1.OrdersService])
 ], OrdersController);
 //# sourceMappingURL=orders.controller.js.map

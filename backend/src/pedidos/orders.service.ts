@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { MercadoPagoConfig, Preference } from 'mercadopago';
+import { MercadoPagoConfig, Preference, Payment } from 'mercadopago';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Pedido, EstadoPedido, MetodoPago } from './pedido.entity';
@@ -97,14 +97,19 @@ export class OrdersService {
                     const client = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN || '' });
                     const preference = new Preference(client);
 
+                    const baseUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+                    const backendUrl = process.env.VITE_API_URL || 'https://3.133.148.136.nip.io';
+
                     const response = await preference.create({
                         body: {
                             items: itemsMp,
                             back_urls: {
-                                success: 'http://localhost:5173/orders?status=success',
-                                failure: 'http://localhost:5173/orders?status=failure',
-                                pending: 'http://localhost:5173/orders?status=pending'
+                                success: `${baseUrl}/orders?status=success`,
+                                failure: `${baseUrl}/orders?status=failure`,
+                                pending: `${baseUrl}/orders?status=pending`
                             },
+                            auto_return: 'approved',
+                            notification_url: `${backendUrl}/api/pedidos/webhook`,
                             external_reference: savedPedido.id.toString(),
                         }
                     });
@@ -164,5 +169,35 @@ export class OrdersService {
         }
         pedido.estadoEntrega = estadoEntrega;
         return this.pedidoRepository.save(pedido);
+    }
+
+    async handleWebhook(body: any) {
+        if (body.type === 'payment' && body.data && body.data.id) {
+            try {
+                const client = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN || '' });
+                const paymentClient = new Payment(client);
+                const payment = await paymentClient.get({ id: body.data.id });
+                
+                const orderId = payment.external_reference;
+                if (!orderId) return { received: true };
+
+                const pedido = await this.pedidoRepository.findOne({ where: { id: parseInt(orderId) } });
+                if (!pedido) return { received: true };
+
+                if (payment.status === 'approved') {
+                    pedido.estado = EstadoPedido.PAGO_EXITOSO;
+                    if (!pedido.estadoEntrega) {
+                        pedido.estadoEntrega = 'Pedido Recibido';
+                    }
+                } else if (payment.status === 'rejected') {
+                    pedido.estado = EstadoPedido.PAGO_RECHAZADO;
+                }
+                
+                await this.pedidoRepository.save(pedido);
+            } catch (error) {
+                console.error('Error procesando webhook de MP:', error);
+            }
+        }
+        return { received: true };
     }
 }
