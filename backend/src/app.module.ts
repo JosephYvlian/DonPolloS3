@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from './usuarios/usuario.entity';
@@ -35,6 +36,7 @@ import { TarjetasModule } from './tarjetas/tarjetas.module';
     MailerModule,
     UsuariosModule,
     TarjetasModule,
+    PrometheusModule.register(),
   ],
 })
 export class AppModule { }
