@@ -15,6 +15,7 @@ export enum EstadoPedido {
     // Legados (mantener para compatibilidad con registros existentes)
     EN_CAMINO = 'En camino',
     ENTREGADO = 'Entregado',
+    RECIBIDO = 'RECIBIDO',
 }
 
 export enum MetodoPago {

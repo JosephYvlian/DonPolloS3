@@ -24,6 +24,7 @@ var EstadoPedido;
     EstadoPedido["PEDIDO_ENTREGADO"] = "Pedido Entregado";
     EstadoPedido["EN_CAMINO"] = "En camino";
     EstadoPedido["ENTREGADO"] = "Entregado";
+    EstadoPedido["RECIBIDO"] = "RECIBIDO";
 })(EstadoPedido || (exports.EstadoPedido = EstadoPedido = {}));
 var MetodoPago;
 (function (MetodoPago) {

@@ -9,7 +9,8 @@ export declare enum EstadoPedido {
     PEDIDO_EN_CAMINO = "Pedido en Camino",
     PEDIDO_ENTREGADO = "Pedido Entregado",
     EN_CAMINO = "En camino",
-    ENTREGADO = "Entregado"
+    ENTREGADO = "Entregado",
+    RECIBIDO = "RECIBIDO"
 }
 export declare enum MetodoPago {
     TARJETA = "TARJETA",
