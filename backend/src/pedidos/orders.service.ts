@@ -171,12 +171,17 @@ export class OrdersService {
         return this.pedidoRepository.save(pedido);
     }
 
-    async handleWebhook(body: any) {
-        if (body.type === 'payment' && body.data && body.data.id) {
+    async handleWebhook(body: any, query?: any) {
+        console.log('Webhook MP recibido:', { body, query });
+        
+        const type = body?.type || body?.action || query?.topic;
+        const dataId = body?.data?.id || query?.id;
+
+        if ((type === 'payment' || type === 'payment.created') && dataId) {
             try {
                 const client = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN || '' });
                 const paymentClient = new Payment(client);
-                const payment = await paymentClient.get({ id: body.data.id });
+                const payment = await paymentClient.get({ id: dataId });
                 
                 const orderId = payment.external_reference;
                 if (!orderId) return { received: true };

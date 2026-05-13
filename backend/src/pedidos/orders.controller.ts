@@ -39,7 +39,7 @@ export class OrdersController {
     }
 
     @Post('webhook')
-    async handleWebhook(@Body() body: any) {
-        return this.ordersService.handleWebhook(body);
+    async handleWebhook(@Body() body: any, @Request() req: any) {
+        return this.ordersService.handleWebhook(body, req.query);
     }
 }

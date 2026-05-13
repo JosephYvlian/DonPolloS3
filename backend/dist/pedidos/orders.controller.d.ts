@@ -15,7 +15,7 @@ export declare class OrdersController {
     getAllPedidos(): Promise<import("./pedido.entity").Pedido[]>;
     updatePedidoStatus(id: string, estado: string): Promise<import("./pedido.entity").Pedido>;
     updatePedidoEntregaStatus(id: string, estadoEntrega: string): Promise<import("./pedido.entity").Pedido>;
-    handleWebhook(body: any): Promise<{
+    handleWebhook(body: any, req: any): Promise<{
         received: boolean;
     }>;
 }

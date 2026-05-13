@@ -37,8 +37,8 @@ let OrdersController = class OrdersController {
     async updatePedidoEntregaStatus(id, estadoEntrega) {
         return this.ordersService.updatePedidoEntregaStatus(+id, estadoEntrega);
     }
-    async handleWebhook(body) {
-        return this.ordersService.handleWebhook(body);
+    async handleWebhook(body, req) {
+        return this.ordersService.handleWebhook(body, req.query);
     }
 };
 exports.OrdersController = OrdersController;
@@ -87,8 +87,9 @@ __decorate([
 __decorate([
     (0, common_1.Post)('webhook'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "handleWebhook", null);
 exports.OrdersController = OrdersController = __decorate([
